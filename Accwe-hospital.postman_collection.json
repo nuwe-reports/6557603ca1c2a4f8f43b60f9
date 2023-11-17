@@ -1,0 +1,628 @@
+{
+	"info": {
+		"_postman_id": "532cd1c4-bc9c-4709-ae42-d319e28865b2",
+		"name": "Accwe-hospital",
+		"description": "Aqui se pueden probar las diferentes EndPoints para la proporcionadas para la creación de una cita (Appointment, Doctor, Patient, Room)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18421818",
+		"_collection_link": "https://www.postman.com/red-astronaut-530463/workspace/test/collection/18421818-532cd1c4-bc9c-4709-ae42-d319e28865b2?action=share&source=collection_link&creator=18421818"
+	},
+	"item": [
+		{
+			"name": "Doctor",
+			"item": [
+				{
+					"name": "getAllDoctors",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}doctors",
+							"host": [
+								"{{baseUrl}}doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getDoctorById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}doctors/{{doctorId}}",
+							"host": [
+								"{{baseUrl}}doctors"
+							],
+							"path": [
+								"{{doctorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createDoctor",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Capturar y establecer appointmentID\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    \r",
+									"    var id = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('appointmentId', id);\r",
+									"\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Capturar y establecer ID como variable de colección\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(201);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    // Capturar el valor de 'id' y establecerlo como variable de colección\r",
+									"    var capturedId = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('doctorId', capturedId);\r",
+									"    pm.collectionVariables.set('doctor', JSON.stringify(jsonResponse));\r",
+									"    \r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Juan\",\r\n    \"lastName\": \"Velez\",\r\n    \"age\": 30,\r\n    \"email\":\"juan@email.com\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}doctor",
+							"host": [
+								"{{baseUrl}}doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteDoctor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}doctors/{{doctorId}}",
+							"host": [
+								"{{baseUrl}}doctors"
+							],
+							"path": [
+								"{{doctorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAllDoctors",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}doctors",
+							"host": [
+								"{{baseUrl}}doctors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patient",
+			"item": [
+				{
+					"name": "getAllPatients",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}patients",
+							"host": [
+								"{{baseUrl}}patients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getPatientById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}patients/{{patientId}}",
+							"host": [
+								"{{baseUrl}}patients"
+							],
+							"path": [
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createPatient",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Capturar y establecer appointmentID\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    \r",
+									"    var id = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('appointmentId', id);\r",
+									"\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Capturar y establecer ID como variable de colección\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(201);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    // Capturar el valor de 'id' y establecerlo como variable de colección\r",
+									"    var capturedId = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('patientId', capturedId);\r",
+									"    pm.collectionVariables.set('patient', JSON.stringify(jsonResponse));\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\":\"Maria\",\r\n    \"lastName\": \"Arias\",\r\n    \"age\": 25,\r\n    \"email\":\"Maria@email.com\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}patient",
+							"host": [
+								"{{baseUrl}}patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletePatient",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}patients/{{patientId}}",
+							"host": [
+								"{{baseUrl}}patients"
+							],
+							"path": [
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAllPatients",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}patients",
+							"host": [
+								"{{baseUrl}}patients"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Room",
+			"item": [
+				{
+					"name": "getAllRooms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}rooms",
+							"host": [
+								"{{baseUrl}}rooms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getRoomByRoomName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}rooms/{{roomName}}",
+							"host": [
+								"{{baseUrl}}rooms"
+							],
+							"path": [
+								"{{roomName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createRoom",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Capturar y establecer ID como variable de colección\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(201);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('roomName');\r",
+									"\r",
+									"    // Capturar el valor de 'id' y establecerlo como variable de colección\r",
+									"    var capturedName = jsonResponse.roomName;\r",
+									"    pm.collectionVariables.set('roomName', capturedName);\r",
+									"    pm.collectionVariables.set('room', JSON.stringify(jsonResponse));\r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"roomName\": \"Dermatology\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}room",
+							"host": [
+								"{{baseUrl}}room"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteRoom",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}rooms/{{roomName}}",
+							"host": [
+								"{{baseUrl}}rooms"
+							],
+							"path": [
+								"{{roomName}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAllRooms",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}rooms",
+							"host": [
+								"{{baseUrl}}rooms"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "getAllAppointments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}appointments",
+							"host": [
+								"{{baseUrl}}appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAppointmentById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}appointments/{{appointmentId}}",
+							"host": [
+								"{{baseUrl}}appointments"
+							],
+							"path": [
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAppointment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"pm.test(\"Capturar y establecer appointmentID\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(200);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    \r",
+									"    var id = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('appointmentId', id);\r",
+									"\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Capturar y establecer ID como variable de colección\", function () {\r",
+									"    // Verificar que la respuesta tiene un status 200 OK\r",
+									"    pm.response.to.have.status(201);\r",
+									"\r",
+									"    // Convertir el cuerpo de la respuesta JSON a un objeto JavaScript\r",
+									"    var jsonResponse = pm.response.json();\r",
+									"\r",
+									"    // Verificar que la respuesta contiene la propiedad 'id'\r",
+									"    pm.expect(jsonResponse).to.have.property('id');\r",
+									"\r",
+									"    // Capturar el valor de 'id' y establecerlo como variable de colección\r",
+									"    var capturedId = jsonResponse.id;\r",
+									"    pm.collectionVariables.set('appointmentId', capturedId);\r",
+									"    \r",
+									"    \r",
+									"    \r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"patient\":{{patient}},\r\n    \"doctor\": {{doctor}},\r\n    \"room\": {{room}},\r\n    \"startsAt\": \"15:00 15/10/2023\",\r\n    \"finishesAt\": \"16:00 15/10/2023\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}appointment",
+							"host": [
+								"{{baseUrl}}appointment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAppointment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}appointments/{{appointmentId}}",
+							"host": [
+								"{{baseUrl}}appointments"
+							],
+							"path": [
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAllAppointments",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}appointments",
+							"host": [
+								"{{baseUrl}}appointments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/",
+			"type": "string"
+		},
+		{
+			"key": "appointmentId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "doctorId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "patientId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "roomName",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "doctor",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "patient",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "room",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
