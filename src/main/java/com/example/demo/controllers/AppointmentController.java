@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.persistence.PersistenceException;
 
 
 @RestController
@@ -51,18 +54,26 @@ public class AppointmentController {
     }
 
     @PostMapping("/appointment")
-    public ResponseEntity<List<Appointment>> createAppointment(@RequestBody Appointment appointment){
-        /** TODO 
-         * Implement this function, which acts as the POST /api/appointment endpoint.
-         * Make sure to check out the whole project. Specially the Appointment.java class
-         */
-        return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT);
-    }
+    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment){
 
+        if (appointment.getStartsAt().equals(appointment.getFinishesAt()) ||
+                appointment.getStartsAt().isAfter(appointment.getFinishesAt())){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        List<Appointment> appointments = appointmentRepository.findAll();
+
+        if (validateAppointment(appointment,appointments)){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+
+        Appointment appointmentCreated = appointmentRepository.save(appointment);
+        return new ResponseEntity<>(appointmentCreated,HttpStatus.OK);
+
+    }
 
     @DeleteMapping("/appointments/{id}")
     public ResponseEntity<HttpStatus> deleteAppointment(@PathVariable("id") long id){
-
         Optional<Appointment> appointment = appointmentRepository.findById(id);
 
         if (!appointment.isPresent()){
@@ -72,13 +83,26 @@ public class AppointmentController {
         appointmentRepository.deleteById(id);
 
         return new ResponseEntity<>(HttpStatus.OK);
-        
+
     }
 
     @DeleteMapping("/appointments")
     public ResponseEntity<HttpStatus> deleteAllAppointments(){
         appointmentRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    boolean validateAppointment(Appointment appointmentToCreate, List<Appointment> appointments){
+        boolean isOverlap = false;
+
+        for (Appointment element : appointments) {
+            if (element.overlaps(appointmentToCreate)) {
+                //isOverlap = true;
+                //break;
+                return true;
+            }
+        }
+        return false;
     }
 
 }
